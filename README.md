@@ -1,2 +1,0 @@
-# DogVision
-DogVision

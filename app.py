@@ -1,8 +1,7 @@
 # app.py
 
-from flask import Flask, render_template, request, jsonify
+from flask import Flask, render_template, request
 import os
-import tensorflow as tf
 import predictor  # Import functions and constants from predictor.py
 import secrets
 
