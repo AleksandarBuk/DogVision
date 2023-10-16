@@ -13,7 +13,7 @@ labels_csv = pd.read_csv("./csv/labels.csv")
 labels = labels_csv["breed"].to_numpy()
 unique_breeds = np.unique(labels)
 
-# Load the trained model with your custom load_model function
+# Load the trained model
 def load_model(model_path):
     """
     Loads a saved model from a specified path.
@@ -22,7 +22,7 @@ def load_model(model_path):
     model = tf.keras.models.load_model(model_path, custom_objects={"KerasLayer": hub.KerasLayer})
     return model
 
-# Function to preprocess an image
+# Preprocess the image
 def preprocess_image(image_path):
     """
     Takes an image file path and turns it into a preprocessed Tensor.
@@ -33,7 +33,7 @@ def preprocess_image(image_path):
     image = tf.image.resize(image, size=[IMG_SIZE, IMG_SIZE])
     return image
 
-# Function to create data batches
+# Create batches
 def create_data_batches(x, batch_size=BATCH_SIZE):
     """
     Creates batches of data out of image (x).
@@ -48,7 +48,7 @@ def get_pred_label(prediction_probabilities):
     """
     return unique_breeds[np.argmax(prediction_probabilities)]
 
-# Function to predict the dog breed
+# Predict breed
 def predict_breed(image_path, model):
     image_directory = os.path.dirname(image_path)
     custom_image_paths = [os.path.join(image_directory, fname) for fname in os.listdir(image_directory)]
