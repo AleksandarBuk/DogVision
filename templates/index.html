@@ -1,28 +1,75 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dog Breed Classifier</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
+
 <body>
-    <h1>Dog Breed Classifier</h1>
+    <div class="main-container">
+        <h1>Dog Breed Classifier</h1>
+        <form id="uploadForm" method="POST" enctype="multipart/form-data" class="section">
+            <input type="file" name="image" accept=".jpg, .jpeg, .png">
+            <button type="submit">Upload and Classify Image</button>
+        </form>
+        {% if uploaded_image %}
 
-    <form method="POST" enctype="multipart/form-data">
-        <input type="file" name="image" accept=".jpg, .jpeg, .png">
-        <input type="submit" value="Upload Image">
-    </form>
-
-    {% if dog_breed %}
-        <div class="result-container">
-            <h2>Predicted Dog Breed:</h2>
-            <p>{{ dog_breed }}</p>
-        </div>
-        <div class="image-container">
+        <div class="image-container section">
             <h2>Uploaded Image:</h2>
-            <img src="{{ uploaded_image }}" alt="Uploaded Image">
+            <img src="{{ uploaded_image }}" alt="Uploaded Image" width="300">
         </div>
-    {% endif %}
+        {% endif %}
+        {% if dog_breed %}
+        <div class="result-container section">
+            <h2>Predicted Dog Breed:</h2>
+            <ul>
+                {% for breed, prob in dog_breed.items() %}
+                <li class="prediction-item" style="display:none;">
+                    {{ breed }}: {{ prob }}%
+                </li>
+                {% endfor %}
+            </ul>
+            <button id="checkButton">Check</button>
+        </div>
+        {% elif uploaded_image %}
+        <div class="processing section">
+            <h2>Processing... Please wait.</h2>
+        </div>
+        {% endif %}
+    </div>
+    <script>
+    let count = 0;
+
+    document.getElementById('checkButton').addEventListener('click', function() {
+        const items = document.querySelectorAll('.prediction-item');
+
+        if (count < items.length) {
+            items[count].style.display = 'block';
+
+            if (count === 4) {
+                items[count].innerHTML = "Best Guess: " + items[count].innerHTML;
+                items[count].classList.add('best-guess');
+            }
+            count++;
+
+            if (count === items.length) {
+                document.getElementById('checkButton').style.display = 'none';
+
+                // Creating the "Upload another photo" button
+                let uploadAnotherBtn = document.createElement('button');
+                uploadAnotherBtn.innerText = 'Upload another photo';
+                uploadAnotherBtn.addEventListener('click', function() {
+                    document.getElementById('uploadForm').reset();  // Reset the form
+                    document.querySelector('input[type="file"]').click();  // Trigger the file input
+                });
+                document.querySelector('.result-container').appendChild(uploadAnotherBtn);
+            }
+        }
+    });
+</script>
 </body>
+
 </html>
