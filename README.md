@@ -17,7 +17,7 @@ The following tools and libraries were used in the development of this model:
 - NumPy
 - Pandas
 - Flask (for deploying the model)
-- Google Cloud (for model deployment)
+- Google Cloud (for model training)
 
 ## Google Colab
 
